@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "521285885566",
+    "project_id": "flipstergame-6f2c4",
+    "storage_bucket": "flipstergame-6f2c4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521285885566:android:4598a679771c5def2e822f",
+        "android_client_info": {
+          "package_name": "com.example.flipster_game"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA7Y7G6TTk8tOO0eEppNEgr6A_CQIjfGE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
