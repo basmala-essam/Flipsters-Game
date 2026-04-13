@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'name_screen.dart';
 
-
-class HomeScreen extends StatelessWidget
-{
-  // Fetches top 5 scores from Firestore and shows them in a dialog
+class HomeScreen extends StatelessWidget {
   Future<void> _showBestScores(BuildContext context) async {
-    // Show a loading dialog while we fetch
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -15,17 +11,13 @@ class HomeScreen extends StatelessWidget
     );
 
     try {
-      // Get top 5 scores from the 'scores' collection, ordered by score descending
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('scores')
           .orderBy('score', descending: true)
           .limit(5)
           .get();
 
-      // Close the loading dialog
       Navigator.pop(context);
-
-      // Build the list of score rows
       List<Widget> scoreRows = [];
 
       if (snapshot.docs.isEmpty) {
@@ -62,7 +54,6 @@ class HomeScreen extends StatelessWidget
         }
       }
 
-      // Show the scores dialog
       showDialog(
         context: context,
         builder: (context) {
@@ -85,10 +76,8 @@ class HomeScreen extends StatelessWidget
         },
       );
     } catch (e) {
-      // Close the loading dialog if it is still open
       Navigator.pop(context);
 
-      // Show an error message
       showDialog(
         context: context,
         builder: (context) {
@@ -163,7 +152,6 @@ class HomeScreen extends StatelessWidget
               SizedBox(
                 width: 270,
                 height: 50,
-                // Best Score button now fetches from Firebase ✅
                 child: ElevatedButton(
                   onPressed: () => _showBestScores(context),
                   child: Text('Best Score'),

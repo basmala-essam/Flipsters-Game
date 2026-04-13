@@ -23,11 +23,8 @@ class game_screen_state extends State<gameScreen> {
   int? sec_ind;
   bool waiting = false;
 
-  // --- Score ---
   int score = 0;
-
-  // --- Timer ---
-  late int timeLeft;        // seconds countdown
+  late int timeLeft;
   Timer? _timer;
   bool gameOver = false;
 
@@ -42,7 +39,20 @@ class game_screen_state extends State<gameScreen> {
       cards = ['🦉', '🦩', '🐧', '🦉', '🦩', '🐧', '🐥', '🐥'];
       timeLeft = 60;
     } else {
-      cards = ['🍕', '🍔', '🍨', '🍕', '🌭', '🧁', '🍩', '🧁', '🍔', '🌭', '🍩', '🍨'];
+      cards = [
+        '🍕',
+        '🍔',
+        '🍨',
+        '🍕',
+        '🌭',
+        '🧁',
+        '🍩',
+        '🧁',
+        '🍔',
+        '🌭',
+        '🍩',
+        '🍨'
+      ];
       timeLeft = 90;
     }
 
@@ -59,7 +69,6 @@ class game_screen_state extends State<gameScreen> {
     super.dispose();
   }
 
-  // ── Timer ────────────────────────────────────────────────────
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (timeLeft <= 0) {
@@ -83,9 +92,11 @@ class game_screen_state extends State<gameScreen> {
       builder: (context) {
         return AlertDialog(
           shadowColor: Colors.blueGrey,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text('⏰ Time\'s Up!'),
-          content: Text('Better luck next time, ${widget.name}!\nScore: $score'),
+          content:
+              Text('Better luck next time, ${widget.name}!\nScore: $score'),
           actions: [
             TextButton(
               onPressed: () {
@@ -103,7 +114,6 @@ class game_screen_state extends State<gameScreen> {
     );
   }
 
-  // ── Card tap logic (unchanged) ────────────────────────────────
   void oncardTap(int index) {
     if (waiting == true) return;
     if (revealed[index] == true) return;
@@ -129,13 +139,12 @@ class game_screen_state extends State<gameScreen> {
       setState(() {
         matched[first_ind!] = true;
         matched[sec_ind!] = true;
-        score += 10; // +10 points per correct match
+        score += 10;
       });
     } else {
       setState(() {
         revealed[first_ind!] = false;
         revealed[sec_ind!] = false;
-        // Wrong guess: no penalty, but you can add one if you like
       });
     }
     first_ind = null;
@@ -153,9 +162,8 @@ class game_screen_state extends State<gameScreen> {
       }
     }
     if (allmatched == true) {
-      _timer?.cancel(); // Stop the timer when player wins
+      _timer?.cancel();
 
-      // Save score to Firebase Firestore
       _saveScoreToFirebase();
 
       showDialog(
@@ -163,7 +171,8 @@ class game_screen_state extends State<gameScreen> {
         builder: (context) {
           return AlertDialog(
             shadowColor: Colors.blueGrey,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             title: Text('You Win! 🥳'),
             content: Text(
               'Good Job ${widget.name}\n'
@@ -188,10 +197,8 @@ class game_screen_state extends State<gameScreen> {
     }
   }
 
-  // ── Firebase: save score ─────────────────────────────────────
   Future<void> _saveScoreToFirebase() async {
     try {
-      // 'scores' is the Firestore collection name
       await FirebaseFirestore.instance.collection('scores').add({
         'name': widget.name,
         'level': widget.level,
@@ -200,12 +207,10 @@ class game_screen_state extends State<gameScreen> {
         'date': DateTime.now().toIso8601String(),
       });
     } catch (e) {
-      // If Firebase fails, game still works normally
       print('Firebase error: $e');
     }
   }
 
-  // ── Grid column count (unchanged) ────────────────────────────
   int getCrossAxisCount() {
     if (widget.level == 'easy') {
       return 1;
@@ -216,7 +221,6 @@ class game_screen_state extends State<gameScreen> {
     }
   }
 
-  // ── Card face (unchanged) ─────────────────────────────────────
   Widget buildcard(int index) {
     if (revealed[index] == true) {
       return Text(
@@ -252,16 +256,16 @@ class game_screen_state extends State<gameScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-
-              // ── Score & Timer bar ────────────────────────────
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Score display
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
                         color: Colors.deepPurple.withOpacity(0.85),
                         borderRadius: BorderRadius.circular(12),
@@ -276,9 +280,9 @@ class game_screen_state extends State<gameScreen> {
                       ),
                     ),
 
-                    // Timer display (turns red when <= 10 seconds)
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
                         color: timeLeft <= 10
                             ? Colors.red.withOpacity(0.85)
@@ -297,10 +301,7 @@ class game_screen_state extends State<gameScreen> {
                   ],
                 ),
               ),
-              // ────────────────────────────────────────────────
-
               SizedBox(height: 10),
-
               Expanded(
                 child: GridView.builder(
                   itemCount: cards.length,

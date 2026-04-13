@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home_screen.dart';
 
-
-class SplashScreen extends StatefulWidget
-{
+class SplashScreen extends StatefulWidget {
   @override
   SplashScreenState createState() {
     return SplashScreenState();
@@ -12,12 +10,10 @@ class SplashScreen extends StatefulWidget
 }
 
 class SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
 
-    // Log every app open to Firebase Firestore
     _logAppOpen();
 
     Future.delayed(Duration(seconds: 3), () {
@@ -32,7 +28,6 @@ class SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  // Saves a record to Firestore every time the app is opened
   Future<void> _logAppOpen() async {
     try {
       await FirebaseFirestore.instance.collection('app_opens').add({

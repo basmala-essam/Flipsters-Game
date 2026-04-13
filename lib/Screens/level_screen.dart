@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../game_screen.dart';
 
-class levelScreen extends StatelessWidget
-{
+class levelScreen extends StatelessWidget {
   final String name;
-  levelScreen({
-    required this.name
-  });
+  levelScreen({required this.name});
 
-  // Logs which level the player picked to Firestore, then navigates
   Future<void> _goToGame(BuildContext context, String level) async {
-    // Save the level choice to Firebase
     try {
       await FirebaseFirestore.instance.collection('level_picks').add({
         'name': name,
@@ -19,7 +14,6 @@ class levelScreen extends StatelessWidget
         'date': DateTime.now().toIso8601String(),
       });
     } catch (e) {
-      // If Firebase fails, we still let the player continue
       print('Firebase error: $e');
     }
 
@@ -60,7 +54,6 @@ class levelScreen extends StatelessWidget
                 height: 50,
                 child: ElevatedButton(
                   child: Text('easy'),
-                  // Now logs to Firebase before navigating ✅
                   onPressed: () => _goToGame(context, 'easy'),
                 ),
               ),

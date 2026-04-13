@@ -12,11 +12,9 @@ class NameScreen extends StatefulWidget {
 class namescreenstate extends State<NameScreen> {
   TextEditingController controller = TextEditingController();
 
-  // Saves the player name to Firestore and goes to the next screen
   Future<void> _saveNameAndContinue(BuildContext context) async {
     String name = controller.text.trim();
 
-    // Don't allow empty name
     if (name.isEmpty) {
       showDialog(
         context: context,
@@ -39,18 +37,14 @@ class namescreenstate extends State<NameScreen> {
       return;
     }
 
-    // Save player name to Firebase Firestore
     try {
       await FirebaseFirestore.instance.collection('players').add({
         'name': name,
         'joinedAt': DateTime.now().toIso8601String(),
       });
     } catch (e) {
-      // If Firebase fails, we still let the player continue
       print('Firebase error: $e');
     }
-
-    // Navigate to level screen
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -100,7 +94,6 @@ class namescreenstate extends State<NameScreen> {
                 width: 160,
                 height: 50,
                 child: ElevatedButton(
-                  // Now calls Firebase save + validation ✅
                   onPressed: () => _saveNameAndContinue(context),
                   child: Text(
                     'Next',
